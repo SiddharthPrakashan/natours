@@ -1,5 +1,4 @@
 const nodemailer = require('nodemailer');
-//const sgTransport = require('nodemailer-sendgrid-transport');
 const pug = require('pug');
 const htmlToText = require('html-to-text');
 
@@ -33,16 +32,16 @@ module.exports = class Email {
     });
   }
 
-  //send actual email
+  // Send the actual email
   async send(template, subject) {
-    // 1) render html based on a pug template
+    // 1) Render HTML based on a pug template
     const html = pug.renderFile(`${__dirname}/../views/email/${template}.pug`, {
       firstName: this.firstName,
       url: this.url,
       subject
     });
 
-    // 2) Define the email options
+    // 2) Define email options
     const mailOptions = {
       from: this.from,
       to: this.to,
@@ -51,18 +50,18 @@ module.exports = class Email {
       text: htmlToText.fromString(html)
     };
 
-    // 3) create transport and send email
+    // 3) Create a transport and send email
     await this.newTransport().sendMail(mailOptions);
   }
 
   async sendWelcome() {
-    await this.send('welcome', 'Welcome to Natours Family!');
+    await this.send('welcome', 'Welcome to the Natours Family!');
   }
 
   async sendPasswordReset() {
     await this.send(
       'passwordReset',
-      'Your Password reset Token (valid only for 10 mins)'
+      'Your password reset token (valid for only 10 minutes)'
     );
   }
 };
